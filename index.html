@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Otomatis Clip — personal video clipper</title>
+<meta name="description" content="Otomatis Clip is a personal desktop app that turns long videos into short vertical clips and sends them to your own TikTok inbox for review." />
+<style>
+  :root {
+    --bg: #080b10;
+    --panel: #0e141c;
+    --panel-2: #121b25;
+    --border: #1e2b38;
+    --text: #e6edf3;
+    --muted: #8b9bab;
+    --green: #00e676;
+    --cyan: #22d3ee;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--text);
+    background:
+      radial-gradient(900px 500px at 15% -10%, rgba(0, 230, 118, .12), transparent 60%),
+      radial-gradient(700px 450px at 90% 0%, rgba(34, 211, 238, .10), transparent 60%),
+      var(--bg);
+    font: 16px/1.65 "Segoe UI", system-ui, -apple-system, Roboto, Arial, sans-serif;
+  }
+  a { color: var(--cyan); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 28px 22px 64px; }
+  header { display: flex; align-items: center; justify-content: space-between; gap: 18px; flex-wrap: wrap; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .mark {
+    width: 42px; height: 42px; border-radius: 12px;
+    display: grid; place-items: center;
+    background: linear-gradient(135deg, rgba(0,230,118,.18), rgba(34,211,238,.18));
+    border: 1px solid rgba(0,230,118,.35);
+    box-shadow: 0 0 24px rgba(0,230,118,.12);
+  }
+  .mark svg { width: 24px; height: 24px; }
+  .brand strong { font-size: 1.05rem; letter-spacing: .2px; }
+  .brand span { display: block; font-size: .72rem; color: var(--muted); letter-spacing: .12em; text-transform: uppercase; }
+  nav { display: flex; gap: 18px; font-size: .9rem; }
+  nav a { color: var(--muted); }
+  nav a:hover { color: var(--text); }
+  .hero { padding: 72px 0 46px; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: .72rem; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--green); border: 1px solid rgba(0,230,118,.35);
+    background: rgba(0,230,118,.06); padding: 6px 12px; border-radius: 999px;
+  }
+  h1 { font-size: clamp(2.1rem, 5vw, 3.3rem); line-height: 1.12; margin: 22px 0 16px; letter-spacing: -.02em; }
+  h1 span { color: var(--green); }
+  .lead { max-width: 640px; color: var(--muted); font-size: 1.06rem; margin: 0 0 28px; }
+  .cta { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 18px; border-radius: 10px; font-weight: 600; font-size: .92rem;
+    border: 1px solid var(--border); color: var(--text); background: var(--panel);
+  }
+  .btn:hover { text-decoration: none; border-color: #31475b; }
+  .btn.primary { background: var(--green); border-color: var(--green); color: #04110a; }
+  .btn.primary:hover { filter: brightness(1.06); }
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 46px; }
+  .card {
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    border: 1px solid var(--border); border-radius: 14px; padding: 20px;
+  }
+  .card .num { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .72rem; color: var(--green); letter-spacing: .12em; }
+  .card h3 { margin: 10px 0 6px; font-size: 1rem; }
+  .card p { margin: 0; color: var(--muted); font-size: .9rem; }
+  .panel { margin-top: 26px; background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 22px; }
+  .panel h2 { margin: 0 0 10px; font-size: 1.1rem; }
+  .panel p { margin: 0 0 10px; color: var(--muted); font-size: .94rem; }
+  .panel p:last-child { margin-bottom: 0; }
+  .tag { display: inline-block; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: .78rem; color: var(--green); background: rgba(0,230,118,.07); border: 1px solid rgba(0,230,118,.22); border-radius: 6px; padding: 2px 7px; }
+  footer { margin-top: 54px; padding-top: 22px; border-top: 1px solid var(--border); color: var(--muted); font-size: .82rem; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  footer a { color: var(--muted); }
+  @media (max-width: 760px) {
+    .grid { grid-template-columns: 1fr; }
+    .hero { padding-top: 48px; }
+    nav { gap: 14px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="#00e676" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="6" cy="6" r="2.6"/><circle cx="6" cy="18" r="2.6"/>
+          <path d="M8.4 7.6 20 19M8.4 16.4 20 5"/>
+        </svg>
+      </div>
+      <div>
+        <strong>Otomatis Clip</strong>
+        <span>Personal video clipper</span>
+      </div>
+    </div>
+    <nav>
+      <a href="#how">How it works</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">Desktop app · Local processing</div>
+      <h1>Turn long videos into <span>short vertical clips</span>.</h1>
+      <p class="lead">
+        Otomatis Clip analyzes a long video, finds the strongest moments, renders them as
+        9:16 clips with animated subtitles, and sends the finished files to your own
+        TikTok inbox for review.
+      </p>
+      <div class="cta">
+        <a class="btn primary" href="#how">See how it works</a>
+        <a class="btn" href="privacy.html">Privacy Policy</a>
+        <a class="btn" href="terms.html">Terms of Service</a>
+      </div>
+    </section>
+
+    <section id="how" class="grid" aria-label="How it works">
+      <article class="card">
+        <div class="num">STEP 01</div>
+        <h3>Analyze</h3>
+        <p>Paste a YouTube, Google Drive, or local video. The app extracts the transcript and scores the most engaging moments.</p>
+      </article>
+      <article class="card">
+        <div class="num">STEP 02</div>
+        <h3>Render</h3>
+        <p>Clips are cut on sentence boundaries, cropped to 9:16, and rendered with subtitles and optional music.</p>
+      </article>
+      <article class="card">
+        <div class="num">STEP 03</div>
+        <h3>Send to TikTok</h3>
+        <p>Choose a clip and upload it to your TikTok inbox. You review and publish it yourself in the TikTok app.</p>
+      </article>
+    </section>
+
+    <section class="panel">
+      <h2>TikTok integration</h2>
+      <p>
+        The app uses <strong>TikTok Login Kit</strong> with the <span class="tag">user.info.basic</span>
+        scope to show which TikTok account is connected. Uploads use the
+        <strong>TikTok Content Posting API</strong> with the <span class="tag">video.upload</span>
+        scope, which sends a video the user explicitly selected to that creator's own TikTok inbox.
+      </p>
+      <p>
+        Otomatis Clip does not publish automatically and does not use the Direct Post scope.
+        The creator reviews the clip and completes the post inside the TikTok app.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>Contact</h2>
+      <p>Questions about the app, privacy, or data deletion: <a href="mailto:beritaotomatis@gmail.com">beritaotomatis@gmail.com</a></p>
+    </section>
+  </main>
+
+  <footer>
+    <span>© 2026 Otomatis Clip</span>
+    <span><a href="privacy.html">Privacy Policy</a> · <a href="terms.html">Terms of Service</a></span>
+  </footer>
+</div>
+</body>
+</html>
